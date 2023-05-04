@@ -282,7 +282,8 @@ app.post("/api/v1/category", async (req, res) => {
     const query = `INSERT INTO category (title) VALUES(?)`;
     const [result] = await pool.execute(query, [title]);
     console.log(result);
-    res.end();
+    res.json({ "message": "insertion ok"});
+    // res.end();
   } catch (error) {
     res.json({ msg: error});
   }
