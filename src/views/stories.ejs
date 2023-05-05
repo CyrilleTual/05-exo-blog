@@ -1,0 +1,12 @@
+<H12> Voici tout nos articles :  </H12>
+
+<% data.forEach(element => { %>
+
+    <article>
+        <h3><%= element.title %></h3>
+        <p><%= element.date %></p>
+        <a href="/api/v1/story/<%= element.id%>">En savoir plus</a>
+        
+    </article>
+ 
+<% }) %>

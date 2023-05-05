@@ -45,30 +45,64 @@ app.get("/api/v1/story", async (req, res) => {
   try {
     const query = "SELECT id, title FROM story";
     const [result] = await pool.execute(query);
-    res.json({
-      data: result,
-    });
+    // res.json({
+    //   data: result,
+    // });
+     res.render("layout", { template: "./stories", data: result });
   } catch (error) {
     res.json({ msg: error });
+   
   }
 });
 
 /**
- * get one by id / story
+ * get one by id / story et tous les détails 
  */
+
 app.get("/api/v1/story/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const query = "SELECT id, title FROM story WHERE id = ? ";
-    const [result] = await pool.execute(query, [id]);
+    // recupération des champs du post
+    const query1 = `SELECT story.title, story.date, story.content, user.alias
+      FROM story 
+      JOIN user ON story.id_user = user.id
+      WHERE  story.id = ? `;
+    const [post] = await pool.execute(query1, [id]);
 
-    res.json({
-      data: result,
-    });
+    // récupérations des photos
+    const query2 = `SELECT photo.url 
+    FROM photo 
+    JOIN story ON  photo.id_story = story.id 
+    WHERE  story.id = ? `;
+    const [photo] = await pool.execute(query2, [id]);
+
+    // recupération des comments
+    const query3 = `SELECT com.user, com.msg, com.date 
+    FROM com 
+    JOIN story ON  com.id_story = story.id 
+    WHERE  story.id = ? `;
+    const [com] = await pool.execute(query3, [id]);
+
+     res.render("layout", {
+       template: "./storyDetails",
+       data: post[0],
+       photo: photo,
+       com: com,
+     });
+
   } catch (error) {
     res.json({ msg: error });
   }
+ 
 });
+
+
+
+
+
+
+
+
 
 /**
  * Post story
@@ -93,9 +127,9 @@ app.post("/api/v1/story", async (req, res) => {
 app.get("/api/v1/user", async (req, res) => {
   try {
     const query = "SELECT id, alias FROM user";
-    const [result] = await pool.execute(query);
+    const result = await pool.execute(query);
     res.json({
-      data: result,
+      data: result[0],
     });
   } catch (error) {
     res.json({ msg: error });

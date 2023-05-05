@@ -1,0 +1,29 @@
+<H2> Voici le détail : <%= data.title %> </H2>
+
+<p> Ce billet à été ecrit par <%= data.alias %> le <%= data.date.toLocaleDateString() %></p>
+
+<p><%= data.content %></p>
+
+<% photo.forEach(element=> { %>
+    <img src="<%=element.url  %>" alt="<%=element.url %>">
+    <% }) 
+%>
+
+<% com.forEach(element=> { %>
+    <li> Nous avons un commentaire de la part de <%= element.user %>. 
+        " <%= element.msg %> " </li>
+    <% }) 
+%>
+    <form action="comment" method="POST">
+        <label for="alias">your alias</label>
+        <input type="text" name="alias" id="alias">
+        <label for="comment">Votre commentaire</label>
+        <input type="text" name="comment" id="comment">
+        <input type="submit" value="Envoyer le formulaire">
+    </form>
+
+
+
+
+
+   
