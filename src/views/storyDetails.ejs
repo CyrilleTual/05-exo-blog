@@ -7,7 +7,6 @@
 
 <div class="card">
     
-    
     <% photo.forEach(element=> { %>
     <img src="<%=element.url  %>" alt="<%=element.url %>">
     <% }) %>
@@ -21,17 +20,15 @@
     <% com.forEach(element=> { %>
         <li> Commentaire de <%= element.user %>.
                 " <%= element.msg %> " </li>
-        <% }) %>
-
+    <% }) %>
 </ul>
 
 <form class="card" action="/comment" method="POST">
-    <input type="hidden" name="id_story" value = <%= idStory %>>
+    <input type="hidden" name="id_story" value = <%= idStory %> />
     <label for="alias">your alias</label>
-    <input type="text" name="alias" id="alias">
+    <input type="text" name="alias" id="alias"><br />
     <label for="comment">Votre commentaire</label>
-    <input type="text" name="comment" id="comment">
-    <textarea name="msg" id="msg" cols=""100 rows="15"> </textarea>
+    <textarea name="comment" id="comment"  cols="55" rows="10"> </textarea>
     <input type="submit" value="Envoyer le formulaire">
 </form>
 

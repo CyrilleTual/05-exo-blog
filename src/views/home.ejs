@@ -1,2 +1,22 @@
+<div class="half">
+    <H1> Voici les dernières publications  : </H1>
 
-<h1>Bloggy le blog</h1>
+    <% data.forEach(element=> { %>
+
+        <article class="card">
+            <h3>
+                <%= element.title %>
+            </h3>
+            <p>
+                <%= element.date %> 
+            </p>
+            <p>
+                <%= element.content %>
+            </p>
+            <a href="/story/<%= element.id%>">En savoir plus</a>
+
+        </article>
+
+        <% }) %>
+
+</div>
