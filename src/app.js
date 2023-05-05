@@ -13,13 +13,13 @@ const app = express();
 app.set("views", "./src/views").set("view engine", "ejs");
 
 app
-  .use(express.json())
-  .use(express.static("public"))
-  .use(express.urlencoded({ extended: true }));
+  .use(express.json()) // basé sur body-parse rôle pour le json
+  .use(express.static("public")) // set des repertoires avec ressources statiques acces direct
+  .use(express.urlencoded({ extended: true })); // aussi basé sur body parser
 
 // route pour vérifier la connexion de notre application (serveur)
 app.get("/", (req, res) => {
-  res.json({ msg: "app running" });
+  res.json({ msg: `app running$` });
 });
 
 // route api permettant de récupérer toutes les catégories on gère les requetes SQL avec une fonction asynchrone afin de mettre en "pause"
@@ -73,8 +73,7 @@ app.get("/api/v1/story/:id", async (req, res) => {
 /**
  * Post story
  */
-app.post ('/api/v1/story', async (req,res)=>{
-
+app.post("/api/v1/story", async (req, res) => {
   const { title } = req.body;
   const { content } = req.body;
   const { id_user } = req.body;
@@ -82,12 +81,11 @@ app.post ('/api/v1/story', async (req,res)=>{
   try {
     const query = `INSERT INTO story (title, content, date, id_user) VALUES (?, ?, ?, ?)`;
     await pool.execute(query, [title, content, date, id_user]);
-    res.end();    
+    res.end();
   } catch (error) {
-    res.json({msg: error})
+    res.json({ msg: error });
   }
-})
-
+});
 
 /**
  * get all / user
@@ -123,11 +121,10 @@ app.get("/api/v1/user/:id", async (req, res) => {
 /**
  * post user (create user)
  */
-app.post ("/api/V1/user", async (req, res) => {
-
-  const { alias }   = req.body;
-  const { email }   = req.body;
-  const { pwd }     = req.body;
+app.post("/api/V1/user", async (req, res) => {
+  const { alias } = req.body;
+  const { email } = req.body;
+  const { pwd } = req.body;
   const { id_role } = req.body;
   const regdate = new Date().toISOString().slice(0, 19).replace("T", " ");
 
@@ -136,11 +133,9 @@ app.post ("/api/V1/user", async (req, res) => {
     await pool.execute(query, [alias, email, pwd, regdate, id_role]);
     res.end();
   } catch (error) {
-    res.json({msg: error})
-  }  
+    res.json({ msg: error });
+  }
 });
-
-
 
 /**
  * get all / comments
@@ -175,12 +170,11 @@ app.get("/api/v1/com/:id", async (req, res) => {
 /**
  * post / comments
  */
-app.post ('/api/V1/com', async (req, res) =>{
-
-  const {user} = req.body;
-  const {msg} = req.body;
-  const {id_story} = req.body;
-  const date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+app.post("/api/V1/com", async (req, res) => {
+  const { user } = req.body;
+  const { msg } = req.body;
+  const { id_story } = req.body;
+  const date = new Date().toISOString().slice(0, 19).replace("T", " ");
 
   console.log(user, msg, date, id_story);
 
@@ -189,11 +183,9 @@ app.post ('/api/V1/com', async (req, res) =>{
     await pool.execute(query, [user, msg, date, id_story]);
     res.end();
   } catch (error) {
-    res.json({ msg: error})
+    res.json({ msg: error });
   }
 });
-
-
 
 /**
  * get all /photo
@@ -228,19 +220,18 @@ app.get("/api/v1/photo/:id", async (req, res) => {
 /**
  * post photo
  */
-app.post ("/api/V1/photo", async (req, res) => {
-  const {url} = req.body;
-  const {id_story} = req.body;
+app.post("/api/V1/photo", async (req, res) => {
+  const { url } = req.body;
+  const { id_story } = req.body;
   try {
     const query = `INSERT INTO photo (url, id_story) VALUES ( ?, ?)`;
     const [result] = await pool.execute(query, [url, id_story]);
     console.log(result);
     res.end();
   } catch (error) {
-    res.json({msg: error})
-  }  
+    res.json({ msg: error });
+  }
 });
-
 
 /**
  * get all / categorry
@@ -277,18 +268,17 @@ app.get("/api/v1/category/:id", async (req, res) => {
  * post category
  */
 app.post("/api/v1/category", async (req, res) => {
-  const {title} = req.body;
+  const { title } = req.body;
   try {
     const query = `INSERT INTO category (title) VALUES(?)`;
     const [result] = await pool.execute(query, [title]);
     console.log(result);
-    res.json({ "message": "insertion ok"});
-    // res.end();
+    res.json({ message: "insertion ok" });
+    res.end();
   } catch (error) {
-    res.json({ msg: error});
+    res.json({ msg: error });
   }
 });
-
 
 /**
  * get story.name and all comments of one Story ( the same result with /api/v1/com?story=idOfStory )
