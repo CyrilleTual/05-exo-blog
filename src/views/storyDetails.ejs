@@ -1,27 +1,45 @@
-<H2> Voici le détail : <%= data.title %> </H2>
+<H2> Voici le détail : <%= data.title %>
+</H2>
+<div class="half">
+ 
 
 <p> Ce billet à été ecrit par <%= data.alias %> le <%= data.date.toLocaleDateString() %></p>
 
-<p><%= data.content %></p>
-
-<% photo.forEach(element=> { %>
+<div class="card">
+    
+    
+    <% photo.forEach(element=> { %>
     <img src="<%=element.url  %>" alt="<%=element.url %>">
-    <% }) 
-%>
+    <% }) %>
+    <p>
+    <%= data.content %>
+    </p>
 
-<% com.forEach(element=> { %>
-    <li> Nous avons un commentaire de la part de <%= element.user %>. 
-        " <%= element.msg %> " </li>
-    <% }) 
-%>
-    <form action="/comment" method="POST">
-        <input type="hidden" name="id_story" value = <%= idStory %>>
-        <label for="alias">your alias</label>
-        <input type="text" name="alias" id="alias">
-        <label for="comment">Votre commentaire</label>
-        <input type="text" name="comment" id="comment">
-        <input type="submit" value="Envoyer le formulaire">
-    </form>
+</div>
+
+<ul class ="card">
+    <% com.forEach(element=> { %>
+        <li> Commentaire de <%= element.user %>.
+                " <%= element.msg %> " </li>
+        <% }) %>
+
+</ul>
+
+<form class="card" action="/comment" method="POST">
+    <input type="hidden" name="id_story" value = <%= idStory %>>
+    <label for="alias">your alias</label>
+    <input type="text" name="alias" id="alias">
+    <label for="comment">Votre commentaire</label>
+    <input type="text" name="comment" id="comment">
+    <textarea name="msg" id="msg" cols=""100 rows="15"> </textarea>
+    <input type="submit" value="Envoyer le formulaire">
+</form>
+
+
+</div>
+
+
+ 
 
 
 

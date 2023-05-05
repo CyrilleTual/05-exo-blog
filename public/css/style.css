@@ -1,3 +1,88 @@
-h1{
-    background-color: purple;
+html {
+  /* Ramener la taille par défaut à 10px */
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.4;
+}
+
+/* Styles des liens par défaut */
+a {
+  text-decoration: none;
+}
+
+a:hover,
+a:focus,
+a:active {
+  text-decoration: underline;
+}
+
+/* Styles des titres par défaut */
+h1, h2, h3, h4, h5, h6 {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+ul, li {
+  margin-left: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+p {
+  margin-bottom: 0;
+  margin-top: 5px;
+} 
+
+nav {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+}
+
+a {
+  display: block;
+  color: #f2e6e6;
+  background-color: rgba(29, 60, 69, 0.8705882353);
+  margin: 10px;
+  padding: 15px 10px;
+  text-align: center;
+  border-radius: 20px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.half {
+    width: 80%;
+}
+
+.card {
+  
+  margin: 1rem;
+  background-color: #f6ead4;
+  padding: 5px;
+  margin-top: 10px;
+  border: 1px solid rgba(29, 60, 69, 0.8705882353);
+  border-radius: 10px;
+}
+.card a {
+  width: 180px;
+  margin: auto;
+}
+
+img {
+  width: 150px;
+}
+
+.date {
+  text-align: center;
 }
