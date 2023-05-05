@@ -7,18 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog</title>
     <meta name="description" content="wonderfull blog">
+    <link rel="stylesheet" href="/css/style.css" />
+    
 </head>
 
 <body>
     <header>
-        <nav>
-            <a href="/">home</a>
-            <a href="/api/v1/story">Toutes nos stories</a>
-            <a href="/admin">contact</a>
-        </nav>
+        <%- include("./navBar.ejs") %>
     </header>
-    <%- include(template) %>
-        <footer></footer>
+    <main>
+        <%- include(template) %>
+    </main>
+    <footer>
+         
+    </footer>
 </body>
 
 </html>
+

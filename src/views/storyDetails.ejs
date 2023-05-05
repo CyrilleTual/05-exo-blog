@@ -14,7 +14,8 @@
         " <%= element.msg %> " </li>
     <% }) 
 %>
-    <form action="comment" method="POST">
+    <form action="/comment" method="POST">
+        <input type="hidden" name="id_story" value = <%= idStory %>>
         <label for="alias">your alias</label>
         <input type="text" name="alias" id="alias">
         <label for="comment">Votre commentaire</label>
