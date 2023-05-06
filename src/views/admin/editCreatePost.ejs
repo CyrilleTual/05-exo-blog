@@ -1,0 +1,66 @@
+<div class="half"> 
+
+<% if (data.storyId) { %>
+    <p> Ce billet à été ecrit par <%= data.alias %> le <%= data.date.toLocaleDateString() %></p>
+    <%=data.userId%>
+<% } %>
+
+
+<form class="card" action="/admin/editCreateProcess" method="POST">
+
+    <% if(data.storyId) { %>
+        <input name="idStory" 
+                value='<%=data.storyId ? data.storyId : '' %>'      
+                hidden = hidden
+        /> 
+        <input name="idUser" 
+                value='<%=data.userId ? data.userId : '' %>'      
+                hidden = hidden
+        />
+    <% } %>
+
+    <label for="title">title</label>
+    <input type="text" 
+            name="title" 
+            id="title"
+            value = '<%= data.title ? data.title : "" %>'
+            
+    /> <br />
+
+    <label for="comment">Texte</label>
+    <textarea name="comment" 
+            id="comment" cols="55" rows="10"
+            value = "<%= data.content ? data.content : '' %>"> <%= data.content ? data.content : "" %>
+    </textarea> <br />
+
+    <input type="submit" value="Envoyer le formulaire">
+
+</form>
+
+
+
+
+
+<% if (data.storyId) { %>
+ 
+    <div class="card">
+
+        <% photo.forEach(element=> { %>
+            <img src="/img/<%=element.url  %>" alt="<%=element.url %>">
+            <!-- <a href="/admin/photoDelete/<%=  %>">Delete</a> -->
+        <% }) %>
+
+    </div>
+
+    <ul class="card">
+        <% com.forEach(element=> { %>
+            <li> Commentaire de <%= element.user %>.
+                    " <%= element.msg %> "        
+            </li>
+        <% }) %>
+    </ul>
+
+<% } %>
+
+
+</div>

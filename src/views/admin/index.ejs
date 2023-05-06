@@ -1,8 +1,10 @@
 <div class="half">
-    <H1> Voici tout nos articles : </H1>
-    
+    <H1> Voici la liste de tout nos articles : </H1>
+
+    <a href="/admin/createStory/<%=  %>">Ecrire un post</a>
+
     <% data.forEach(element=> { %>
-    
+
         <article class="card">
             <h3>
                 <%= element.title %>
@@ -13,11 +15,10 @@
             <p>
                 <%= element.content %>
             </p>
-            <a href="/story/<%= element.storyID%>">En savoir plus</a>
-    
+            <a href="/admin/edit/<%= element.storyID%>">edit</a>
+            <a href="/admin/delete/story/<%= element.storyID%>">delete</a>
         </article>
-    
+
         <% }) %>
 
 </div>
-

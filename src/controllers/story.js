@@ -1,16 +1,15 @@
 import { pool } from "../config/database.js";
 
-
-
-
-
 /**
  * 
  * recupération de tous les posts /   
  */
 export const storiesDisplay = async (req, res) => {
   try {
-    const query = "SELECT id, title FROM story";
+    // recupération des champs du post
+    const query = `SELECT story.id as storyID, story.title, story.date, story.content, user.alias
+      FROM story 
+      JOIN user ON story.id_user = user.id `;
     const [result] = await pool.execute(query);
     res.render("layout", { template: "./stories", data: result });
   } catch (error) {
