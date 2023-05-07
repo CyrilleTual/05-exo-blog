@@ -5,13 +5,21 @@ import { pool } from "../config/database.js";
  * recupération de tous les posts /   
  */
 export const storiesDisplay = async (req, res) => {
+  const session = {
+    user: req.session.username || null,
+    islog: req.session.isLogged || null,
+    role: req.session.role || null,
+  };
   try {
-    // recupération des champs du post
-    const query = `SELECT story.id as storyID, story.title, story.date, story.content, user.alias
+    // recupération des posts 
+    const query = `SELECT story.id as storyID, story.title, story.date, story.content, user.alias, category.title
       FROM story 
-      JOIN user ON story.id_user = user.id `;
+      JOIN user ON story.id_user = user.id 
+      JOIN category_story ON category_story.id_story = story.id
+      JOIN category ON category_story.id_category = category.id
+      `;
     const [result] = await pool.execute(query);
-    res.render("layout", { template: "./stories", data: result });
+    res.render("layout", { template: "./stories", data: result, session:session});
   } catch (error) {
     res.json({ msg: error });
   }
@@ -23,6 +31,11 @@ export const storiesDisplay = async (req, res) => {
 
 export const storyDetails =  async (req, res) => {
   const { id } = req.params;
+  const session = {
+    user: req.session.username || null,
+    islog: req.session.isLogged || null,
+    role: req.session.role || null,
+  };
   try {
     // recupération des champs du post
     const query1 = `SELECT story.title, story.date, story.content, user.alias
@@ -51,6 +64,7 @@ export const storyDetails =  async (req, res) => {
        data: post[0],
        photo: photo,
        com: com,
+       session:session
      });
 
   } catch (error) {

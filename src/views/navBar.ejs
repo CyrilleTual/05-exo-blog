@@ -1,5 +1,16 @@
 <nav>
     <a href="/">home</a>
     <a href="/story">Toutes nos stories</a>
+    <% if (session.user === null) { %>
+    <a href="/auth/login">Se connecter</a>
+    <% } else { %>
+    <a href="/auth/logout">Se deconnecter</a>
+    <% if (session.role === "admin") { %>
     <a href="/admin">admin</a>
+    <% } %>
+    <%= session.user%>
+    <%= session.role%>
+    <% } %>
 </nav>
+
+

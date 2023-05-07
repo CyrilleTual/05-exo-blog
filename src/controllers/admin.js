@@ -1,18 +1,23 @@
 import { pool } from "../config/database.js";
-import { v4 as uuidv4 } from "uuid";
+
 
 /**
  * 
  * recupération de tous les posts /   
  */
 export const adminIndex = async (req, res) => {
+    const session = {
+      user: req.session.username || null,
+      islog: req.session.isLogged || null,
+      role: req.session.role || null,
+    };
   try {
     // recupération des champs du post
     const query = `SELECT story.id AS storyID, story.title, story.date, story.content, user.alias
       FROM story 
       JOIN user ON story.id_user = user.id `;
     const [result] = await pool.execute(query);
-    res.render("layout", { template: "./admin/index", data: result });
+    res.render("layout", { template: "./admin/index", data: result, session:session});
   } catch (error) {
     res.json({ msg: error });
   }
@@ -25,6 +30,11 @@ export const adminIndex = async (req, res) => {
  */
 export const editCreatePost =   async (req, res) => {
   const { id } = req.params;
+  const session = {
+    user: req.session.username || null,
+    islog: req.session.isLogged || null,
+    role: req.session.role || null,
+  };
   try {
     // recupération des champs du post
     const query1 = `SELECT story.id AS storyId, story.title, story.date, story.content, user.alias, user.id AS userId
@@ -55,6 +65,7 @@ export const editCreatePost =   async (req, res) => {
        data: post[0],
        photo: photo,
        com: com,
+       session: session
      });
 
   } catch (error) {
@@ -68,9 +79,15 @@ export const editCreatePost =   async (req, res) => {
  *affichage du formiulaire de création et d'édition
  */
 export const createStory = (req, res) => {
+    const session = {
+      user: req.session.username || null,
+      islog: req.session.isLogged || null,
+      role: req.session.role || null,
+    };
     res.render("layout", {
       template: "./admin/editCreatePost",
-      data : [] 
+      data : [] ,
+      session: session
     });
 }
 
@@ -124,6 +141,7 @@ export const editCreateProcess = async (req, res) => {
  * Delete Story 
  */
 export const deleteStory = async (req, res) => {
+    const role=  req.session.role || null;
     const { id } = req.params;
     try {
         const query = `DELETE FROM story WHERE id = ?`;
