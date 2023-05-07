@@ -26,26 +26,32 @@ export const loginProcess = async (req, res) => {
         // selection du compte basé sur email ET pwd
         try {
            
-          const query = `SELECT role.title AS role
-                FROM role
-                JOIN user ON user.id_role = role.id
-                WHERE user.alias = ? AND user.pwd = ? 
+          const query = `SELECT user.pwd, role.title AS role
+                    FROM user
+                    JOIN role ON role.id = user.id_role
+                    WHERE user.alias = ?
             `;
-            const [result] = await pool.execute(query, [username, password]);
+            const [result] = await pool.execute(query, [username]);
             // si reponse pleine -> user existe 
-
             if (result.length > 0) {
-                //on a bien un user -> set de la session 
-                req.session.isLogged = true;
-                req.session.username = username;
-                req.session.role = result[0].role;
-                // Redirection  home page
-                res.redirect("/");
-                res.end();
+                //on a bien un user 
+                //on contrôle le password          
+                if (!bcrypt.compareSync(password, result[0].pwd)) {
+                    res.redirect("/");
+                    res.end();
+                }else{
+                  //-> set de la session
+                  req.session.isLogged = true;
+                  req.session.username = username;
+                  req.session.role = result[0].role;
+                  // Redirection  home page
+                  res.redirect("/");
+                  res.end();
+                }
+ 
             }else{
-          
 
-                res.redirect(`/auth/login`);
+            res.redirect(`/auth/login`);
                 res.end(); 
             }
             res.end(); 
