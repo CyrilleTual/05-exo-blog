@@ -3,6 +3,7 @@
     <a href="/story">Toutes nos stories</a>
     <% if (session.user === null) { %>
     <a href="/auth/login">Se connecter</a>
+    <a href="/auth/register">Créer un compte</a>
     <% } else { %>
     <a href="/auth/logout">Se deconnecter</a>
     <% if (session.role === "admin") { %>

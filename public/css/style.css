@@ -46,7 +46,7 @@ nav {
 a {
   display: block;
   color: #f2e6e6;
-  background-color: rgba(29, 60, 69, 0.8705882353);
+  background-color: #3274d6;;
   margin: 10px;
   padding: 15px 10px;
   text-align: center;
@@ -68,7 +68,8 @@ a {
 .card {
   
   margin: 1rem;
-  background-color: #f6ead4;
+  /* background-color: #f6ead4;  */
+  background-color: #de781f78;
   padding: 5px;
   margin-top: 10px;
   border: 1px solid rgba(29, 60, 69, 0.8705882353);
@@ -115,7 +116,7 @@ img {
     background-color: #3274d6;
     color: #ffffff;
 }
-.login form input[type="password"], .login form input[type="text"] {
+.login form input[type="password"], .login form input[type="text"], .login form input[type="email"]{
     width: 310px;
     height: 50px;
     border: 1px solid #dee0e4;
