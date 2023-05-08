@@ -1,8 +1,6 @@
 import { pool } from "../config/database.js";
 import { mySession } from "../utils/utils.js";
 
-
-
 /**
  * recupération de tous les posts /   
  */

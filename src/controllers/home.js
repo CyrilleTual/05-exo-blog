@@ -12,7 +12,6 @@ async function recupPhotos(idStory) {
  * Récupération des 3 derniers posts pour home page
  */
 
-
 export const storiesLastest = async (req, res) => {
   
   const session = mySession(req);
@@ -33,7 +32,7 @@ export const storiesLastest = async (req, res) => {
          //console.log ("resPhoto", resultPhoto)
          post.photos = resultPhoto;
          result2.push(post);
-         //console.log(result2); // ici on c'est bien le resultat que je veux *************************************
+ 
        }
        return result2;
      };
@@ -43,7 +42,7 @@ export const storiesLastest = async (req, res) => {
         console.log(res2);
         res.render("layout", {
           template: "./stories",
-          data: res2, /////////////////  pour l' utiliser ici ***************
+          data: res2, 
           session: session,
         });
       });
