@@ -1,4 +1,5 @@
 import { pool } from "../config/database.js";
+import { mySession } from "../utils/utils.js";
 
 async function recupPhotos (idStory) {
   let query1 = `SELECT url FROM photo WHERE id_story = ?`;
@@ -12,38 +13,43 @@ async function recupPhotos (idStory) {
  * recupération de tous les posts /   
  */
 export const storiesDisplay = async (req, res) => {
-  const session = {
-    user: req.session.username || null,
-    islog: req.session.isLogged || null,
-    role: req.session.role || null,
-  };
+  const session = mySession(req);
+  let result2 = [];
   try {
     // recupération des posts
-    const query = `SELECT story.id as storyID, story.title, story.date, story.content, user.alias, category.title
+    const query = `SELECT story.id as storyID, story.title, story.date, story.content, user.alias, category.title as category
       FROM story 
       JOIN user ON story.id_user = user.id 
       JOIN category_story ON category_story.id_story = story.id
       JOIN category ON category_story.id_category = category.id
       `;
-    const [result] = await pool.execute(query);
+    const [result] = await pool.execute(query)
 
     // pour chaque post recupérer les photos et les inserer comme nouvelle clé dans l'objet post
     // on fait un nouveau tableau de resultats result2 avec les nouveaux posts
-    let result2 = [];
-    await result.forEach(async (post) => {
-      const resultPhoto = await recupPhotos(post.storyID);
-      //console.log ("resPhoto", resultPhoto)
-      post.photos = resultPhoto;
-      result2.push(post);
-      console.log (result2);  // ici on c'est le resultat que je veux 
-    });
+    let resu = async function (result) {
+      for (const post of result) {
+        const resultPhoto = await recupPhotos(post.storyID);
+        //console.log ("resPhoto", resultPhoto)
+        post.photos = resultPhoto;
+        result2.push(post);
+        //console.log(result2); // ici on c'est bien le resultat que je veux *************************************
+      }
+      return result2
+    }
 
+    resu(result)
+    .then (res2 =>{
+      console.log(res2);
+      res.render("layout", {
+        template: "./stories",
+        data: res2, /////////////////  pour l' utiliser ici ***************
+        session: session,
+      });
+    })
 
-    res.render("layout", {
-      template: "./stories",
-      data: result,
-      session: session,
-    });
+    
+    
   } catch (error) {
     res.json({ msg: error });
   }

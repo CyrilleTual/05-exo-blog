@@ -1,4 +1,12 @@
-import { pool } from "../config/database.js";
+import { pool } from "../config/database.js"
+import { mySession } from "../utils/utils.js";
+
+async function recupPhotos(idStory) {
+  let query1 = `SELECT url FROM photo WHERE id_story = ?`;
+  let [resultPhoto] = await pool.execute(query1, [idStory]);
+  return resultPhoto;
+}
+
 
 /**
  * Récupération des 3 derniers posts pour home page
@@ -6,18 +14,43 @@ import { pool } from "../config/database.js";
 
 
 export const storiesLastest = async (req, res) => {
-  const session = {
-    user: req.session.username || null,
-    islog: req.session.isLogged || null,
-    role: req.session.role || null,
-    idUser: req.session.idUser || null,
-  };
+  
+  const session = mySession(req);
+  let result2 = [];
 
-  console.log(session);
   try {
-    const query = "SELECT title, id, content, date FROM story LIMIT 3";
+    // recupération des champs du post
+    const query = `SELECT story.id AS storyID, story.title, story.date AS date, story.content, user.alias
+      FROM story 
+      JOIN user ON story.id_user = user.id 
+      ORDER BY date DESC
+      LIMIT 3`;
     const [result] = await pool.execute(query);
-    res.render("layout", { template: "./home", data: result, session:session});
+
+     let resu = async function (result) {
+       for (const post of result) {
+         const resultPhoto = await recupPhotos(post.storyID);
+         //console.log ("resPhoto", resultPhoto)
+         post.photos = resultPhoto;
+         result2.push(post);
+         //console.log(result2); // ici on c'est bien le resultat que je veux *************************************
+       }
+       return result2;
+     };
+
+
+      resu(result).then((res2) => {
+        console.log(res2);
+        res.render("layout", {
+          template: "./stories",
+          data: res2, /////////////////  pour l' utiliser ici ***************
+          session: session,
+        });
+      });
+
+
+
+
   } catch (error) {
     res.json({ msg: error });
   }

@@ -7,8 +7,11 @@
             <h3>
                 <%= element.title %>
             </h3>
+            <% element.photos.forEach(element=> { %>
+                <img src="/img/<%=element.url  %>" alt="<%=element.url %>">
+                <% }) %>
             <p>
-                <%= element.alias %>
+                Un récit de <%= element.alias %>  posté le <%= element.date.toLocaleDateString() %> dans la catégorie <%= element.category %>
             </p>
             <p>
                 <%= element.content %>

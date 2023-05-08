@@ -1,4 +1,4 @@
-import { pool } from "../config/database.js";
+import { pool } from "../src/config/database.js";
 
 async function recupPhotos (idStory) {
   let query1 = `SELECT url FROM photo WHERE id_story = ?`;
