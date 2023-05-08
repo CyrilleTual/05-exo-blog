@@ -7,6 +7,9 @@
             <h3>
                 <%= element.title %>
             </h3>
+                        <% element.photos.forEach(element=> { %>
+                            <img src="/img/<%=element.url  %>" alt="<%=element.url %>">
+                            <% }) %>
             <p>
                 <%= element.date.toLocaleDateString() %> 
             </p>

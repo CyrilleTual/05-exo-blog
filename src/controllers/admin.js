@@ -160,10 +160,10 @@ export const editCreateProcess = async (req, res) => {
  * Delete Story 
  */
 export const deleteStory = async (req, res) => {
-    const role=  req.session.role || null;
+     
     const { id } = req.params;
     try {
-        const query = `DELETE FROM story WHERE id = ?`;
+        const query = `DELETE  FROM story WHERE story.id = ?`;
         await pool.execute(query, [id]);
         res.redirect (`/admin`)
         res.end();

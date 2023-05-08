@@ -41,7 +41,7 @@ export const storiesLastest = async (req, res) => {
       resu(result).then((res2) => {
         console.log(res2);
         res.render("layout", {
-          template: "./stories",
+          template: "./home",
           data: res2, 
           session: session,
         });
