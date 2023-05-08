@@ -33,6 +33,12 @@
             value = "<%= data.content ? data.content : '' %>"> <%= data.content ? data.content : "" %>
     </textarea> <br />
 
+    <label for="category">category</label>  
+    <select name="idCategory" id="category">
+        <% categories.forEach(category=> { %>
+            <option value="<%= category.id %>"><%= category.id %>  / <%= category.title %></option>    
+        <% }) %>
+    </select><br />
     <input type="submit" value="Envoyer le formulaire">
 
 </form>

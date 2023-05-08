@@ -10,6 +10,7 @@ export const storiesLastest = async (req, res) => {
     user: req.session.username || null,
     islog: req.session.isLogged || null,
     role: req.session.role || null,
+    idUser: req.session.idUser || null,
   };
 
   console.log(session);

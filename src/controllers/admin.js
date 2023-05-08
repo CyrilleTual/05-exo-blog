@@ -1,28 +1,28 @@
 import { pool } from "../config/database.js";
+import { mySession } from "../utils/utils.js";
+
 
 
 /**
- * 
  * recupération de tous les posts /   
  */
 export const adminIndex = async (req, res) => {
-    const session = {
-      user: req.session.username || null,
-      islog: req.session.isLogged || null,
-      role: req.session.role || null,
-    };
+
+    const session =mySession(req); 
   try {
     // recupération des champs du post
     const query = `SELECT story.id AS storyID, story.title, story.date, story.content, user.alias
       FROM story 
       JOIN user ON story.id_user = user.id `;
     const [result] = await pool.execute(query);
+
+    // pour chaque post recupérer les photos et les inserer comme nouvelle clé dans l'objet post
+
     res.render("layout", { template: "./admin/index", data: result, session:session});
   } catch (error) {
     res.json({ msg: error });
   }
 };
-
 
 /**
 * Détails d'un post avec les photos et commentaires
@@ -78,17 +78,24 @@ export const editCreatePost =   async (req, res) => {
 /**
  *affichage du formiulaire de création et d'édition
  */
-export const createStory = (req, res) => {
-    const session = {
-      user: req.session.username || null,
-      islog: req.session.isLogged || null,
-      role: req.session.role || null,
-    };
-    res.render("layout", {
-      template: "./admin/editCreatePost",
-      data : [] ,
-      session: session
-    });
+export const createStory = async (req, res) => {
+
+    const session = mySession(req);
+    // on doit recupérer la liste des catégories 
+    try {
+      // recupération des champs du post
+      const query = `SELECT * FROM category `;
+      const [categories] = await pool.execute(query);
+       res.render("layout", {
+         template: "./admin/editCreatePost",
+         data: [],
+         session: session,
+         categories: categories,
+       });
+    } catch (error) {
+      res.json({ msg: error });
+    }
+
 }
 
 /**
@@ -96,26 +103,40 @@ export const createStory = (req, res) => {
  */
 export const editCreateProcess = async (req, res) => {
     
-    const { idUser, alias, title, comment } = req.body ;
+    const { idUser, alias, title, comment, idCategory } = req.body ;
+
+
     /**
     * si pas d'id on est dans le cas d'une création -> création d'un id
     */
     if (!("idStory" in req.body)){
 
         /**
-         * id user à recuperer dans la session 
+         * id user à recupérer 
          */
 
-        let idUser
-        !("idUser" in req.body)?  idUser = "1" : idUser = req.body.idUser
+        let idUser = req.session.idUser;
 
-        // on insère l'enregistrement 
+        console.log ('is user : ', idUser)
+        //!("idUser" in req.body)?  idUser = "1" : idUser = req.body.idUser
+
+        // on insère la story
         try {
+        // table Story ET on recupère l'id de l'enregistrement créé
         const query = `INSERT INTO story (title, content, date, id_user) VALUES (?,?, NOW(), ?)`;
         await pool.execute(query, [title, comment, idUser]);
+
+        // table category_story - il nous faut id de story crée
+        const query2 = `SELECT LAST_INSERT_ID()`
+        const [[toto]] = await pool.execute(query2);
+        const id_story = (Object.values(toto))[0];     
+
+        //console.log ( "les ids", id_story, idCategory)
+        const query3 = `INSERT INTO category_story (id_story, id_category) VALUES (?,?)`;
+        await pool.execute(query3, [id_story, idCategory]);
         res.redirect (`/story`)
         res.end();
-         console.log(alias, title, comment, idUser);
+      
         } catch (error) {
         res.json({ msg: error });
         }
