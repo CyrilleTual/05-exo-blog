@@ -6,7 +6,7 @@
 <% } %>
 
 
-<form class="card" action="/admin/editCreateProcess" method="POST">
+<form class="card" action="/admin/editCreateProcess" method="POST" enctype="multipart/form-data>
 
     <% if(data.storyId) { %>
         <input name="idStory" 
@@ -39,6 +39,12 @@
             <option value="<%= category.id %>"><%= category.id %>  / <%= category.title %></option>    
         <% }) %>
     </select><br />
+
+
+    <input type="file" name="photo"><br>'
+
+
+
   
     <input type="submit" value="Envoyer le formulaire">
 
