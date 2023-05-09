@@ -60,7 +60,7 @@ export const editCreatePost =   async (req, res) => {
     const query4 = `SELECT * FROM category `;
     const [categories] = await pool.execute(query4);
 
-    console.log(id, post[0], photo, com);
+    //console.log(id, post[0], photo, com);
 
     res.render("layout", {
       template: "./admin/editCreatePost",
@@ -120,8 +120,7 @@ export const editCreateProcess = async (req, res) => {
 
         let idUser = req.session.idUser;
 
-        console.log ('is user : ', idUser)
-        console.log ("deux",title, comment, idUser)
+
 
         // on insère la story
         try {
@@ -155,7 +154,7 @@ export const editCreateProcess = async (req, res) => {
 
       
 
-          console.log ( "les ids", idStory, idCategory)
+          //console.log ( "les ids", idStory, idCategory)
           const query3 = `UPDATE category_story SET id_category= ? WHERE id_story=?`;
           await pool.execute(query3, [idCategory, idStory]);
 

@@ -1,3 +1,23 @@
+
+<% if (errorMess.length>0) { %>
+<div class="errorMess" id="modal">
+    <div class="content">
+        
+            <p>Ah, il y a un petit problème : </br>
+                <span class="error"> 
+                <% errorMess.forEach(message=> { %>
+                    <%= message %> </br>
+                <% }) %>
+                </span>
+            </p>
+            <p>Merci de corriger ce qui ne va pas !</p>
+            <a href="#modal">Compris</a>
+           
+    </div>
+</div>
+<% } %>
+
+
 <div class="login">
     <h1>Register</h1>
     <form action="/auth/register" method="post">

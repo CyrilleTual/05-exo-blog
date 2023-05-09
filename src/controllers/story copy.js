@@ -1,6 +1,12 @@
 import { pool } from "../config/database.js";
 import { mySession } from "../utils/utils.js";
 
+async function recupPhotos (idStory) {
+  let query1 = `SELECT url FROM photo WHERE id_story = ?`;
+  let [resultPhoto] = await pool.execute(query1, [idStory]);
+  return (resultPhoto);
+}
+
 /**
  * 
  * recupération de tous les posts /   
@@ -20,19 +26,28 @@ export const storiesDisplay = async (req, res) => {
 
     // pour chaque post recupérer les photos et les inserer comme nouvelle clé dans l'objet post
     // on fait un nouveau tableau de resultats result2 avec les nouveaux posts
-      for await (const post of result) {
-        let query1 = `SELECT url FROM photo WHERE id_story = ?`;
-        let [resultPhoto] = await pool.execute(query1, [post.storyID]);
+    let resu = async function (result) {
+      for (const post of result) {
+        const resultPhoto = await recupPhotos(post.storyID);
+        //console.log ("resPhoto", resultPhoto)
         post.photos = resultPhoto;
         result2.push(post);
+        //console.log(result2); // ici on c'est bien le resultat que je veux *************************************
       }
- 
+      return result2
+    }
+
+    resu(result)
+    .then (res2 =>{
+      
       res.render("layout", {
         template: "./stories",
-        data: result2, 
+        data: res2, /////////////////  pour l' utiliser ici ***************
         session: session,
       });
+    })
 
+    
     
   } catch (error) {
     res.json({ msg: error });
