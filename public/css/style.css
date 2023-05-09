@@ -171,7 +171,6 @@ img {
 }
 
 .error {
-  font-size: 2.9 rem;
   color: red;
   font-weight: bold;
   text-shadow: #FC0 1px 0 10px;
