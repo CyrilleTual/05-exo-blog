@@ -8,6 +8,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1.6rem;
   line-height: 1.4;
+  background-image: url(/img/beautiful-wallpaper-gb7ace667e_1280.jpg);
+  opacity: 0.90;
+  background-color: black ;
+  background-size: cover;
+   
 }
 
 /* Styles des liens par défaut */
@@ -66,13 +71,12 @@ a {
 }
 
 .card {
-  
   margin: 1rem;
-  /* background-color: #f6ead4;  */
-  background-color: #de781f78;
   padding: 5px;
   margin-top: 10px;
   border: 1px solid rgba(29, 60, 69, 0.8705882353);
+   background-color: #ffffff;
+    box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
   border-radius: 10px;
 }
 .card a {

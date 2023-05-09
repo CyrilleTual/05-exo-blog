@@ -55,17 +55,22 @@ export const editCreatePost =   async (req, res) => {
     WHERE  story.id = ? `;
     const [com] = await pool.execute(query3, [id]);
 
-    console.log( id, post[0], photo, com)
+    
+    // recupération des categories
+    const query4 = `SELECT * FROM category `;
+    const [categories] = await pool.execute(query4);
 
-     res.render("layout", {
-       template: "./admin/editCreatePost",
-       idStory: id,
-       data: post[0],
-       photo: photo,
-       com: com,
-       session: session
-     });
+    console.log(id, post[0], photo, com);
 
+    res.render("layout", {
+      template: "./admin/editCreatePost",
+      idStory: id,
+      data: post[0],
+      photo: photo,
+      com: com,
+      session: session,
+      categories: categories
+    });
   } catch (error) {
     res.json({ msg: error });
   }
@@ -81,7 +86,7 @@ export const createStory = async (req, res) => {
     const session = mySession(req);
     // on doit recupérer la liste des catégories 
     try {
-      // recupération des champs du post
+      // recupération des categories
       const query = `SELECT * FROM category `;
       const [categories] = await pool.execute(query);
        res.render("layout", {
@@ -116,7 +121,7 @@ export const editCreateProcess = async (req, res) => {
         let idUser = req.session.idUser;
 
         console.log ('is user : ', idUser)
-        //!("idUser" in req.body)?  idUser = "1" : idUser = req.body.idUser
+        console.log ("deux",title, comment, idUser)
 
         // on insère la story
         try {
@@ -145,10 +150,17 @@ export const editCreateProcess = async (req, res) => {
         const idStory = req.body.idStory ; 
         // on insere dans l'ancienne story les nouvelles valeurs de title, comment
         try {
-            const query = `UPDATE story SET title=?, content =?  WHERE id = ?`;
-            await pool.execute(query, [title, comment, idStory])
-            res.redirect(`/admin`);
-            res.end();
+          const query = `UPDATE story SET title=?, content =?  WHERE id = ?`;
+          await pool.execute(query, [title, comment, idStory]);
+
+      
+
+          console.log ( "les ids", idStory, idCategory)
+          const query3 = `UPDATE category_story SET id_category= ? WHERE id_story=?`;
+          await pool.execute(query3, [idCategory, idStory]);
+
+          res.redirect(`/admin`);
+          res.end();
         } catch (error) {
            res.json({ msg: error }); 
         }
@@ -163,7 +175,7 @@ export const deleteStory = async (req, res) => {
      
     const { id } = req.params;
     try {
-        const query = `DELETE  FROM story WHERE story.id = ?`;
+        const query = `DELETE  FROM story WHERE id = ?`;
         await pool.execute(query, [id]);
         res.redirect (`/admin`)
         res.end();

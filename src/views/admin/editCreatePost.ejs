@@ -32,15 +32,14 @@
             id="comment" cols="55" rows="10"
             value = "<%= data.content ? data.content : '' %>"> <%= data.content ? data.content : "" %>
     </textarea> <br />
-
-    <% if(data.categories) { %>
+ 
     <label for="category">category</label>  
     <select name="idCategory" id="category">
         <% categories.forEach(category=> { %>
             <option value="<%= category.id %>"><%= category.id %>  / <%= category.title %></option>    
         <% }) %>
     </select><br />
-    <% } %>
+  
     <input type="submit" value="Envoyer le formulaire">
 
 </form>
